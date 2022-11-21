@@ -93,4 +93,4 @@ Observe that running `yarn --immutable` from `pruned/` fails because the lockfil
 
 or
 
-From the monorepo directory note that the `out/yarn.lock` does not include an `ajv` entry when the resolution exists. Remove the resolution from the package.json and run `yarn turbo prune --scope=web --docker`. Note that the generated `out/yarn.lock` now includes an `ajv` entry.
+From the monorepo directory run an install and note that the `out/yarn.lock` does not include an `ajv` entry when the resolution exists. Remove the resolution from the package.json, run an install and then run `yarn turbo prune --scope=web --docker`. Note that the generated `out/yarn.lock` now includes an `ajv` entry.
