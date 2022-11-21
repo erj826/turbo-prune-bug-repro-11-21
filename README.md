@@ -2,7 +2,7 @@
 
 This repo was created to provide a reproduction of a possible bug in Turborepo.
 
-There are two folders in this project:
+There are two significant folders in this project:
 
 ## monorepo
 
@@ -23,11 +23,13 @@ All of the code in `monorepo` is what comes by default from running the commands
   },
 ```
 
-Running turbo prune generated the `out/` directory.
+Running turbo prune generated the `out/` directory that is referenced in the `pruned` section below.
 
 ```bash
 yarn turbo prune --scope=web --docker
 ```
+
+For illustrative purposes I have removed `out/` from the `.gitignore`.
 
 ## pruned
 
