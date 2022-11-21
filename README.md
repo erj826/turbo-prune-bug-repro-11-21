@@ -55,12 +55,42 @@ cp -r monorepo/.yarn pruned/.yarn
 
 ## What operating system are you using
 
-Mac (intel)
+Mac
 
 ## Describe the bug
 
-To optimize our Docker builds we are attempting to use turbo prune to create a lighter weight image. After copying the lockfile and the package.json files to our image we need to install our dependencies with the `--immutable` flag to ensure that our dependencies will not change. We have observed that when we include yarn resolutions in our root package.json in our monorepo we are unable to run `yarn --immutable` successfully in our _pruned_ monorepo.
+To optimize our Docker builds we are attempting to use turbo prune to create a lighter weight image. After running prune we copy our pruned lockfile and .json files into a directory and then attempt to run an immutable install.
 
-To reproduce this bug you can follow the steps listed in the `Overview` above, or you can clone this repo and observe that running `yarn --immutable` from `pruned/` fails because the lockfile will be modified.
+We have observed that when we include yarn resolutions in our root package.json we are unable to run `yarn --immutable` successfully in the _pruned_ monorepo.
 
-<img src="/screenshots/yarn-output.png" alt="yarn output" width="60%"/>
+### For example
+
+In this reproduction `ajv` is a dependency of `eslint`.
+
+```
+ericjacobson@Erics-MacBook-Air pruned % yarn why ajv
+├─ @eslint/eslintrc@npm:0.4.3
+│  └─ ajv@npm:6.12.6 (via npm:^6.12.4)
+│
+├─ eslint@npm:7.32.0
+│  └─ ajv@npm:6.12.6 (via npm:^6.10.0)
+│
+└─ table@npm:6.8.1
+   └─ ajv@npm:8.11.2 (via npm:^8.0.1)
+```
+
+When the resolution **is not** included in the root package.json the generated `out/yarn.lock` is correct, and includes an `ajv` entry.
+
+When the resolution **is** included in the root package.json then generated `out/yarn.lock` is **incorrect**, and does not include any `ajv` entries.
+
+### Reproducing this behavior
+
+Clone this repo and then either:
+
+Observe that running `yarn --immutable` from `pruned/` fails because the lockfile will be modified
+
+<img src="screenshots/yarn-output.png" alt="yarn output" width="60%"/>
+
+or
+
+From the monorepo directory note that the `out/yarn.lock` does not include an `ajv` entry when the resolution exists. Remove the resolution from the package.json and run `yarn turbo prune --scope=web --docker`. Note that the generated `out/yarn.lock` now includes an `ajv` entry.
