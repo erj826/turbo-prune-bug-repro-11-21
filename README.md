@@ -65,7 +65,7 @@ We have observed that when the root package.json includes yarn resolutions we ar
 
 ### For example
 
-In this reproduction `ajv` is a dependency of `eslint`.
+In this reproduction `ajv` is a dependency of `eslint` so it is a necessary dependency in the pruned monorepo.
 
 ```
 ericjacobson@Erics-MacBook-Air pruned % yarn why ajv
