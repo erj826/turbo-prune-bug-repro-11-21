@@ -61,7 +61,7 @@ Mac
 
 To optimize our Docker builds we are attempting to use turbo prune to create a lighter weight image. After running prune we copy our pruned lockfile and .json files into a directory and then attempt to run an immutable install.
 
-We have observed that when we include yarn resolutions in our root package.json we are unable to run `yarn --immutable` successfully in the _pruned_ monorepo.
+We have observed that when the root package.json includes yarn resolutions we are unable to run `yarn --immutable` successfully in the _pruned_ monorepo.
 
 ### For example
 
